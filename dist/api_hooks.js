@@ -168,6 +168,8 @@ function useIndexApi(httpClient, props) {
         order: indexApiState.order,
         orderBy: indexApiState.orderBy,
         changeOrder: changeOrder,
+        setOrder: setOrder,
+        setOrderBy: setOrderBy,
     };
     var execute = function (path, options) { return __awaiter(_this, void 0, void 0, function () {
         var params, result, data_1, e_1;

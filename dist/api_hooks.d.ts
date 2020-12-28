@@ -57,6 +57,8 @@ export declare type OrderSet = {
     order: Order;
     orderBy: string;
     changeOrder: (attr: string) => void;
+    setOrder: (order: Order) => void;
+    setOrderBy: (orderBy: string) => void;
 };
 export declare type IndexApiState = {
     page: number;
