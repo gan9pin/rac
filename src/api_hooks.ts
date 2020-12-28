@@ -109,6 +109,8 @@ export type OrderSet = {
   order: Order;
   orderBy: string;
   changeOrder: (attr: string) => void;
+  setOrder: (order: Order) => void;
+  setOrderBy: (orderBy: string) => void;
 };
 
 export type IndexApiState = {
@@ -244,6 +246,8 @@ export function useIndexApi<T extends BaseResponse, U>(
     order: indexApiState.order,
     orderBy: indexApiState.orderBy,
     changeOrder: changeOrder,
+    setOrder: setOrder,
+    setOrderBy: setOrderBy,
   };
 
   const execute = async (path: string, options?: { params?: U }) => {
