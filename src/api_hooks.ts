@@ -22,6 +22,8 @@ export type ApiSet<T> = {
   setResponse: Dispatch<SetStateAction<T>>;
   isError: boolean;
   isSuccess: () => boolean;
+  isFailure: () => boolean;
+  status: number | undefined;
 };
 
 export type IndexApiSet<T> = ApiSet<T> & {
@@ -46,7 +48,9 @@ export function useApiState(): [
   ApiError,
   (error: any) => void,
   boolean,
-  () => boolean
+  () => boolean,
+  () => boolean,
+  number | undefined
 ] {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<ApiError>({
@@ -55,17 +59,11 @@ export function useApiState(): [
     details: {},
   });
   const [isError, setIsError] = useState<boolean>(false);
+  const [status, setStatus] = useState<number | undefined>();
 
   const handleError = (error: any) => {
     if (error && error.response) {
-      if (error?.response?.status == 401) {
-        const message = error.response.data?.message
-          ? error.response.data?.message
-          : "認証エラーが発生しました。再度ログインしてください";
-        window.location.href = `/auth_error?message=${message}`;
-        return;
-      }
-
+      setStatus(error?.response?.status);
       setApiError(() => error.response.data);
       setIsError(true);
     }
@@ -75,15 +73,29 @@ export function useApiState(): [
     return !loading && !isError;
   };
 
+  const isFailure = () => {
+    return !loading && isError;
+  };
+
   useEffect(() => {
     if (loading) {
       // ロード開始時にエラーを消す
       setApiError({ messages: [], details: {}, message: "" });
       setIsError(false);
+      setStatus(undefined);
     }
   }, [loading]);
 
-  return [loading, setLoading, apiError, handleError, isError, isSuccess];
+  return [
+    loading,
+    setLoading,
+    apiError,
+    handleError,
+    isError,
+    isSuccess,
+    isFailure,
+    status,
+  ];
 }
 
 type RansackOrderParams = {
@@ -189,6 +201,8 @@ export function useIndexApi<T extends BaseResponse, U>(
     handleError,
     isError,
     isSuccess,
+    isFailure,
+    status,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
   const [indexApiState, dispatch] = useReducer(
@@ -295,6 +309,8 @@ export function useIndexApi<T extends BaseResponse, U>(
     setState: setState,
     isError: isError,
     isSuccess: isSuccess,
+    isFailure: isFailure,
+    status: status,
   };
 }
 
@@ -313,6 +329,8 @@ export function useShowApi<T extends BaseResponse, U>(
     handleError,
     isError,
     isSuccess,
+    isFailure,
+    status,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -336,6 +354,8 @@ export function useShowApi<T extends BaseResponse, U>(
     execute: execute,
     isError: isError,
     isSuccess: isSuccess,
+    isFailure: isFailure,
+    status: status,
   };
 }
 
@@ -350,6 +370,8 @@ export function usePostApi<T extends BaseResponse, U>(
     handleError,
     isError,
     isSuccess,
+    isFailure,
+    status,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -377,6 +399,8 @@ export function usePostApi<T extends BaseResponse, U>(
     execute: execute,
     isError: isError,
     isSuccess: isSuccess,
+    isFailure: isFailure,
+    status: status,
   };
 }
 
@@ -393,6 +417,8 @@ export function usePatchApi<T extends BaseResponse, U>(
     handleError,
     isError,
     isSuccess,
+    isFailure,
+    status,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -419,6 +445,8 @@ export function usePatchApi<T extends BaseResponse, U>(
     execute: execute,
     isError: isError,
     isSuccess: isSuccess,
+    isFailure: isFailure,
+    status: status,
   };
 }
 
@@ -433,6 +461,8 @@ export function useDeleteApi<T extends BaseResponse>(
     handleError,
     isError,
     isSuccess,
+    isFailure,
+    status,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -459,5 +489,7 @@ export function useDeleteApi<T extends BaseResponse>(
     execute: execute,
     isError: isError,
     isSuccess: isSuccess,
+    isFailure: isFailure,
+    status: status,
   };
 }

@@ -58,14 +58,11 @@ function useApiState() {
         details: {},
     }), apiError = _b[0], setApiError = _b[1];
     var _c = react_1.useState(false), isError = _c[0], setIsError = _c[1];
+    var _d = react_1.useState(), status = _d[0], setStatus = _d[1];
     var handleError = function (error) {
-        var _a, _b, _c;
+        var _a;
         if (error && error.response) {
-            if (((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.status) == 401) {
-                var message = ((_b = error.response.data) === null || _b === void 0 ? void 0 : _b.message) ? (_c = error.response.data) === null || _c === void 0 ? void 0 : _c.message : "認証エラーが発生しました。再度ログインしてください";
-                window.location.href = "/auth_error?message=" + message;
-                return;
-            }
+            setStatus((_a = error === null || error === void 0 ? void 0 : error.response) === null || _a === void 0 ? void 0 : _a.status);
             setApiError(function () { return error.response.data; });
             setIsError(true);
         }
@@ -73,14 +70,27 @@ function useApiState() {
     var isSuccess = function () {
         return !loading && !isError;
     };
+    var isFailure = function () {
+        return !loading && isError;
+    };
     react_1.useEffect(function () {
         if (loading) {
             // ロード開始時にエラーを消す
             setApiError({ messages: [], details: {}, message: "" });
             setIsError(false);
+            setStatus(undefined);
         }
     }, [loading]);
-    return [loading, setLoading, apiError, handleError, isError, isSuccess];
+    return [
+        loading,
+        setLoading,
+        apiError,
+        handleError,
+        isError,
+        isSuccess,
+        isFailure,
+        status,
+    ];
 }
 exports.useApiState = useApiState;
 var IndexApiAction;
@@ -118,7 +128,7 @@ var indexReducer = function (state, action) {
  */
 function useIndexApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var _c = react_1.useReducer(indexReducer, props.initialState
         ? __assign(__assign({}, initialIndexState), props.initialState) : initialIndexState), indexApiState = _c[0], dispatch = _c[1];
@@ -222,12 +232,14 @@ function useIndexApi(httpClient, props) {
         setState: setState,
         isError: isError,
         isSuccess: isSuccess,
+        isFailure: isFailure,
+        status: status,
     };
 }
 exports.useIndexApi = useIndexApi;
 function useShowApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = react_1.useCallback(function (apiPath, params) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_2, e_2;
@@ -262,12 +274,14 @@ function useShowApi(httpClient, props) {
         execute: execute,
         isError: isError,
         isSuccess: isSuccess,
+        isFailure: isFailure,
+        status: status,
     };
 }
 exports.useShowApi = useShowApi;
 function usePostApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath, form) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_3, e_3;
@@ -306,12 +320,14 @@ function usePostApi(httpClient, props) {
         execute: execute,
         isError: isError,
         isSuccess: isSuccess,
+        isFailure: isFailure,
+        status: status,
     };
 }
 exports.usePostApi = usePostApi;
 function usePatchApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath, params) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_4, e_4;
@@ -349,12 +365,14 @@ function usePatchApi(httpClient, props) {
         execute: execute,
         isError: isError,
         isSuccess: isSuccess,
+        isFailure: isFailure,
+        status: status,
     };
 }
 exports.usePatchApi = usePatchApi;
 function useDeleteApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_5, e_5;
@@ -392,6 +410,8 @@ function useDeleteApi(httpClient, props) {
         execute: execute,
         isError: isError,
         isSuccess: isSuccess,
+        isFailure: isFailure,
+        status: status,
     };
 }
 exports.useDeleteApi = useDeleteApi;
