@@ -90,6 +90,7 @@ function useApiState() {
         isSuccess,
         isFailure,
         status,
+        setStatus,
     ];
 }
 exports.useApiState = useApiState;
@@ -128,7 +129,7 @@ var indexReducer = function (state, action) {
  */
 function useIndexApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7], setStatus = _a[8];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var _c = react_1.useReducer(indexReducer, props.initialState
         ? __assign(__assign({}, initialIndexState), props.initialState) : initialIndexState), indexApiState = _c[0], dispatch = _c[1];
@@ -209,6 +210,7 @@ function useIndexApi(httpClient, props) {
                 case 2:
                     result = _a.sent();
                     data_1 = result.data;
+                    setStatus(result.status);
                     setResponse(function () { return data_1; });
                     return [3 /*break*/, 4];
                 case 3:
@@ -239,7 +241,7 @@ function useIndexApi(httpClient, props) {
 exports.useIndexApi = useIndexApi;
 function useShowApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7], setStatus = _a[8];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = react_1.useCallback(function (apiPath, params) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_2, e_2;
@@ -255,6 +257,7 @@ function useShowApi(httpClient, props) {
                     result = _a.sent();
                     data_2 = result.data;
                     setResponse(function () { return data_2; });
+                    setStatus(result.status);
                     return [3 /*break*/, 4];
                 case 3:
                     e_2 = _a.sent();
@@ -281,7 +284,7 @@ function useShowApi(httpClient, props) {
 exports.useShowApi = useShowApi;
 function usePostApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7], setStatus = _a[8];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath, form) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_3, e_3;
@@ -300,6 +303,7 @@ function usePostApi(httpClient, props) {
                     result = _a.sent();
                     data_3 = result.data;
                     setResponse(function () { return data_3; });
+                    setStatus(result.status);
                     form === null || form === void 0 ? void 0 : form.resetForm();
                     return [3 /*break*/, 4];
                 case 3:
@@ -327,7 +331,7 @@ function usePostApi(httpClient, props) {
 exports.usePostApi = usePostApi;
 function usePatchApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7], setStatus = _a[8];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath, params) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_4, e_4;
@@ -346,6 +350,7 @@ function usePatchApi(httpClient, props) {
                     result = _a.sent();
                     data_4 = result.data;
                     setResponse(function () { return data_4; });
+                    setStatus(result.status);
                     return [3 /*break*/, 4];
                 case 3:
                     e_4 = _a.sent();
@@ -372,7 +377,7 @@ function usePatchApi(httpClient, props) {
 exports.usePatchApi = usePatchApi;
 function useDeleteApi(httpClient, props) {
     var _this = this;
-    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7];
+    var _a = useApiState(), loading = _a[0], setLoading = _a[1], apiError = _a[2], handleError = _a[3], isError = _a[4], isSuccess = _a[5], isFailure = _a[6], status = _a[7], setStatus = _a[8];
     var _b = react_1.useState(props.initialResponse), response = _b[0], setResponse = _b[1];
     var execute = function (apiPath) { return __awaiter(_this, void 0, void 0, function () {
         var result, data_5, e_5;
@@ -391,6 +396,7 @@ function useDeleteApi(httpClient, props) {
                     result = _a.sent();
                     data_5 = result.data;
                     setResponse(function () { return data_5; });
+                    setStatus(result.status);
                     return [3 /*break*/, 4];
                 case 3:
                     e_5 = _a.sent();

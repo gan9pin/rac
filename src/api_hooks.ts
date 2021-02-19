@@ -50,7 +50,8 @@ export function useApiState(): [
   boolean,
   () => boolean,
   () => boolean,
-  number | undefined
+  number | undefined,
+  Dispatch<SetStateAction<number | undefined>>
 ] {
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState<ApiError>({
@@ -95,6 +96,7 @@ export function useApiState(): [
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ];
 }
 
@@ -203,6 +205,7 @@ export function useIndexApi<T extends BaseResponse, U>(
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
   const [indexApiState, dispatch] = useReducer(
@@ -290,7 +293,7 @@ export function useIndexApi<T extends BaseResponse, U>(
 
       const result = await httpClient.get(path, params);
       const data: T = result.data;
-
+      setStatus(result.status);
       setResponse(() => data);
     } catch (e) {
       handleError(e);
@@ -331,6 +334,7 @@ export function useShowApi<T extends BaseResponse, U>(
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -340,6 +344,7 @@ export function useShowApi<T extends BaseResponse, U>(
       const result = await httpClient.get(apiPath, params);
       const data: T = result.data;
       setResponse(() => data);
+      setStatus(result.status);
     } catch (e) {
       handleError(e);
     }
@@ -372,6 +377,7 @@ export function usePostApi<T extends BaseResponse, U>(
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -384,6 +390,7 @@ export function usePostApi<T extends BaseResponse, U>(
       const result = await httpClient.post(apiPath, form?.object);
       const data: T = result.data;
       setResponse(() => data);
+      setStatus(result.status);
       form?.resetForm();
     } catch (e) {
       handleError(e);
@@ -419,6 +426,7 @@ export function usePatchApi<T extends BaseResponse, U>(
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -431,6 +439,7 @@ export function usePatchApi<T extends BaseResponse, U>(
       const result = await httpClient.patch(apiPath, params);
       const data: T = result.data;
       setResponse(() => data);
+      setStatus(result.status);
     } catch (e) {
       handleError(e);
     }
@@ -463,6 +472,7 @@ export function useDeleteApi<T extends BaseResponse>(
     isSuccess,
     isFailure,
     status,
+    setStatus,
   ] = useApiState();
   const [response, setResponse] = useState<T>(props.initialResponse);
 
@@ -475,6 +485,7 @@ export function useDeleteApi<T extends BaseResponse>(
       const result = await httpClient.delete(apiPath);
       const data: T = result.data;
       setResponse(() => data);
+      setStatus(result.status);
     } catch (e) {
       handleError(e);
     }

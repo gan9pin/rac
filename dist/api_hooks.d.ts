@@ -40,7 +40,8 @@ export declare function useApiState(): [
     boolean,
     () => boolean,
     () => boolean,
-    number | undefined
+    number | undefined,
+    Dispatch<SetStateAction<number | undefined>>
 ];
 declare type RansackOrderParams = {
     s?: string;
