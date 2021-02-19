@@ -68,10 +68,10 @@ function useApiState() {
         }
     };
     var isSuccess = function () {
-        return !loading && !isError;
+        return !loading && !isError && !!status && status < 300;
     };
     var isFailure = function () {
-        return !loading && isError;
+        return !loading && isError && !!status && status >= 300;
     };
     react_1.useEffect(function () {
         if (loading) {

@@ -69,12 +69,12 @@ export function useApiState(): [
     }
   };
 
-  const isSuccess = () => {
-    return !loading && !isError;
+  const isSuccess = (): boolean => {
+    return !loading && !isError && !!status && status < 300;
   };
 
-  const isFailure = () => {
-    return !loading && isError;
+  const isFailure = (): boolean => {
+    return !loading && isError && !!status && status >= 300;
   };
 
   useEffect(() => {
